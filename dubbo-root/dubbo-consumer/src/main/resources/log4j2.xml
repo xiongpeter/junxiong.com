@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="off">
+    <!--官方手册： http://logging.apache.org/log4j/2.x/manual/appenders.html#AsyncAppender -->
+    <!-- 配置变量 -->
+    <Properties>
+        <Property name="fileName">D:/logs/project-dubbo.log</Property>
+        <Property name="backupFilePattern">D:/logs/project-dubbo%d{yyyy-MM-dd}_%i.log.gz</Property>
+
+        <!-- 下面配置log文件不使用压缩. -->
+        <!-- <Property name="backupFilePattern">D:/logs/app_%d{yyyy-MM-DD}_%i.log</Property> -->
+    </Properties>
+    <Appenders>
+        <!-- 输出到控制台Log配置 -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} [%F:%L] %p:%m%n" />
+        </Console>
+
+        <!-- 输出到日志文件的配置,fileName配置日志输出路径,filePattern配置备份日志输出路径 -->
+        <RollingFile name="RollingFile" fileName="D:/logs/project-dubbo-consumer.log"
+                     filePattern="D:/logs/project-dubbo-consumer%d{yyyy-MM-dd}_%i.log.gz" append="true">
+            <PatternLayout>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} [%F:%L] %p:%m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <!-- 日志文件大小,超出此文件大小的日志会创建备份 -->
+                <SizeBasedTriggeringPolicy size="50MB" />
+            </Policies>
+            <!-- 每天最多保留的日志文件数量 -->
+            <DefaultRolloverStrategy max="50" />
+        </RollingFile>
+
+        <!-- 配置日志文件异步写文件.注:使用守护线程异步写 -->
+       <!--  <Async name="ASYNC_RollingFile" bufferSize="1024" includeLocation="true">
+            <AppenderRef ref="RollingFile" />
+            <LinkedTransferQueue />
+        </Async> -->
+    </Appenders>
+    <Loggers>
+        <!-- 输出的日志级别和方式. -->
+        <Root level="info">
+            <AppenderRef ref="Console" />
+        </Root>
+        <!-- 把mapper所在的包路径设置输出的日志级别为debug.输出SQL -->
+        <logger name="com.quickdev.perssistence.mapper" level="info" />
+        <!-- <logger name="com.quickdev.perssistence.mappers" level="DEBUG" additivity="false">
+            <appender-ref ref="Console"/>
+        </logger>  -->
+		
+        <!-- <logger name="org.springframework.core" level="error" />  -->
+    </Loggers>
+</Configuration>
